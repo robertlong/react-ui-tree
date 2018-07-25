@@ -8,7 +8,9 @@
 
 .m-tree {
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
   .f-no-select;
 }
 
@@ -24,7 +26,7 @@
   }
 
   &.placeholder {
-    border: 1px dashed #ccc;
+    outline: 1px dashed #ccc;
   }
 
   .inner {
