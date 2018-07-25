@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -90,9 +94,27 @@ var UITreeNode = function (_Component) {
     };
 
     _this.handleMouseDown = function (e) {
+      e.stopPropagation();
+      _this.startPos = { x: e.clientX, y: e.clientY };
+      window.addEventListener("mousemove", _this.handleMouseMove);
+      window.addEventListener("mouseup", function () {
+        window.removeEventListener("mousemove", _this.handleMouseMove);
+      });
+    };
+
+    _this.handleMouseMove = function (e) {
+      if (!_this.startPos) return;
+
+      var dragThreshold = _this.props.dragThreshold;
+
+      var deltaX = Math.abs(e.clientX - _this.startPos.x);
+      var deltaY = Math.abs(e.clientY - _this.startPos.y);
+      if (deltaX < dragThreshold && deltaY < dragThreshold) return;
+
+      _this.startPos = null;
+
       var nodeId = _this.props.index.id;
       var dom = _this.innerRef.current;
-
       if (_this.props.onDragStart) {
         _this.props.onDragStart(nodeId, dom, e);
       }
@@ -123,7 +145,11 @@ var UITreeNode = function (_Component) {
         },
         _react2.default.createElement(
           'div',
-          { className: 'inner', ref: this.innerRef, onMouseDown: this.handleMouseDown },
+          {
+            className: 'inner',
+            ref: this.innerRef,
+            onMouseDown: this.handleMouseDown
+          },
           this.renderCollapse(),
           tree.renderNode(node)
         ),
@@ -134,5 +160,13 @@ var UITreeNode = function (_Component) {
 
   return UITreeNode;
 }(_react.Component);
+
+UITreeNode.propTypes = {
+  dragThreshold: _propTypes2.default.number
+};
+UITreeNode.defaultProps = {
+  dragThreshold: 8
+};
+
 
 module.exports = UITreeNode;
