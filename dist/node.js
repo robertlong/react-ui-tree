@@ -105,6 +105,10 @@ var UITreeNode = function (_Component) {
     _this.handleMouseMove = function (e) {
       if (!_this.startPos) return;
 
+      var dom = _this.innerRef.current;
+      // This happens rarely, if we catch an event in the middle of an update/render cycle.
+      if (!dom) return;
+
       var dragThreshold = _this.props.dragThreshold;
 
       var deltaX = Math.abs(e.clientX - _this.startPos.x);
@@ -114,7 +118,6 @@ var UITreeNode = function (_Component) {
       _this.startPos = null;
 
       var nodeId = _this.props.index.id;
-      var dom = _this.innerRef.current;
       if (_this.props.onDragStart) {
         _this.props.onDragStart(nodeId, dom, e);
       }
