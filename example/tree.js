@@ -37,6 +37,9 @@ module.exports = {
         {
           module: 'index.html',
           leaf: true
+        },
+        {
+          module: 'test-folder'
         }
       ]
     },
@@ -88,6 +91,9 @@ module.exports = {
     {
       module: 'webpack.config.js',
       leaf: true
+    },
+    {
+      module: 'test-folder-2'
     }
   ]
 };
